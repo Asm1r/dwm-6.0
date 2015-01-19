@@ -1,0 +1,27 @@
+diff -paur dwm.old/dwm.c dwm.new/dwm.c
+--- dwm.old/dwm.c	2012-06-23 12:07:44.464915821 +0200
++++ dwm.new/dwm.c	2012-06-23 12:07:49.324957090 +0200
+@@ -1438,13 +1438,12 @@ restack(Monitor *m) {
+ 	drawbar(m);
+ 	if(!m->sel)
+ 		return;
+-	if(m->sel->isfloating || !m->lt[m->sellt]->arrange)
+-		XRaiseWindow(dpy, m->sel->win);
++	XRaiseWindow(dpy, m->sel->win);
+ 	if(m->lt[m->sellt]->arrange) {
+ 		wc.stack_mode = Below;
+ 		wc.sibling = m->barwin;
+ 		for(c = m->stack; c; c = c->snext)
+-			if(!c->isfloating && ISVISIBLE(c)) {
++			if(c != m->sel && !c->isfloating && ISVISIBLE(c)) {
+ 				XConfigureWindow(dpy, c->win, CWSibling|CWStackMode, &wc);
+ 				wc.sibling = c->win;
+ 			}
+@@ -1559,6 +1558,7 @@ setfullscreen(Client *c, Bool fullscreen
+ 		c->isfloating = True;
+ 		resizeclient(c, c->mon->mx, c->mon->my, c->mon->mw, c->mon->mh);
+ 		XRaiseWindow(dpy, c->win);
++		arrange(c->mon);
+ 	}
+ 	else {
+ 		XChangeProperty(dpy, c->win, netatom[NetWMState], XA_ATOM, 32,

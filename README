@@ -1,0 +1,5 @@
+Personal dwm configuration with patches collected from various sources (thanks
+to them).
+Before compiling do:
+$ for i in ./dwm-patches/*diff; do patch -N -i $i; done
+
